@@ -20,38 +20,37 @@ modules:
   # 2. Repositories + package install / remove
   - type: dnf
     repos:
-      # Brave official repository (for brave-origin)
       files:
+        # Brave official repository (for brave-origin)
         - https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-      # Optional: Terra (if noctalia is not yet in official Fedora for the current release)
-      # copr: []  # add if needed later
+        # Terra (swww and other useful packages)
+        - https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo
     install:
       packages:
         # Compositor + shell
         - niri
-        - noctalia                 # official Fedora package (or noctalia-shell from Terra if needed)
+        - noctalia
         # Browser
         - brave-origin
         # Light supporting tools
         - alacritty
-        - swww                     # wallpaper daemon
-        - mako                     # notifications (backup / simple)
+        - swww                     # from Terra
+        - mako
         - wlsunset
         - thunar
         - xarchiver
         - jetbrains-mono-fonts
-        - qt6ct                    # Qt theming without full Plasma
-        # Portals (keep both for flexibility)
+        - qt6ct
+        # Portals
         - xdg-desktop-portal-gnome
         - xdg-desktop-portal-gtk
     remove:
       packages:
-        # Browser we replace
         - firefox
         - firefox-langpacks
-        # Heavy / unnecessary KDE apps (safe removals)
+        # Heavy / unnecessary KDE apps
         - dolphin
-        - konsole                  # we use alacritty
+        - konsole
         - kate
         - kwrite
         - gwenview
@@ -74,9 +73,9 @@ modules:
         - kolourpaint
         - kruler
         - kcolorchooser
-        - spectacle                # can re-add later if wanted
+        - spectacle
         - plasma-welcome
-        - kde-gtk-config           # optional, keep if theming issues appear
+        - kde-gtk-config
 
   # 3. Signing (BlueBuild default)
   - type: signing
