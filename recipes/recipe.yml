@@ -7,7 +7,7 @@ name: bazzite-eol
 description: "Bazzite End of Line Spin — Niri + Noctalia with Tron: Legacy inspired cyan neon aesthetic. Gaming stack preserved."
 
 # Base: Bazzite KDE (desktop, AMD/Intel). Change to bazzite-nvidia / bazzite-nvidia-open if needed.
-base-image: ghcr.io/ublue-os/bazzite
+base-image: ghcr.io/ublue-os/bazzite-nvidia-open
 image-version: stable
 
 modules:
