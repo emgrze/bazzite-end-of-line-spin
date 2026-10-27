@@ -1,0 +1,117 @@
+// Bazzite End of Line — Niri default config
+// Cyan neon aesthetic. Minimal starting point.
+// Users can override in ~/.config/niri/config.kdl
+
+// Input
+input {
+    keyboard {
+        xkb {
+            // layout "pl"
+        }
+    }
+    touchpad {
+        tap
+        natural-scroll
+    }
+}
+
+// Outputs — leave empty for auto
+// output "eDP-1" {
+//     scale 1.0
+// }
+
+// Layout
+layout {
+    gaps 8
+    center-focused-column "never"
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    default-column-width { proportion 0.5; }
+    focus-ring {
+        width 2
+        active-color "#00F0FF"
+        inactive-color "#1a3a4a"
+    }
+    border {
+        width 2
+        active-color "#00F0FF"
+        inactive-color "#0a1a24"
+        // sharp corners for the cyber look
+        // (Niri draws the border; radius is controlled by the window itself)
+    }
+}
+
+// Animations — basic + placeholder for custom shaders
+animations {
+    // Uncomment and tune later for Tron-style open/close
+    // slowdown 1.2
+    // window-open {
+    //     duration-ms 350
+    //     custom-shader r" ... "
+    // }
+    // window-close {
+    //     duration-ms 250
+    //     custom-shader r" ... "
+    // }
+
+    horizontal-view-movement {
+        spring damping-ratio=0.8 stiffness=800 epsilon=0.0001
+    }
+}
+
+// Window rules
+window-rule {
+    match app-id="firefox"
+    open-maximized true
+}
+
+// Key bindings (Niri defaults + a few useful ones)
+binds {
+    // Terminal
+    Mod+Return { spawn "alacritty"; }
+    Mod+Shift+Return { spawn "alacritty"; }
+
+    // Launcher / overview (Noctalia handles most of this)
+    Mod+D { spawn "qs" "-c" "noctalia"; }   // adjust if Noctalia command differs
+
+    // Window management
+    Mod+Q { close-window; }
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+
+    // Focus
+    Mod+Left  { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up    { focus-window-up; }
+    Mod+Down  { focus-window-down; }
+    Mod+H     { focus-column-left; }
+    Mod+L     { focus-column-right; }
+    Mod+K     { focus-window-up; }
+    Mod+J     { focus-window-down; }
+
+    // Move
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Down  { move-window-down; }
+
+    // Workspaces
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+
+    // Screenshot / power
+    Mod+Shift+S { screenshot; }
+    Mod+Shift+E { quit; }
+    Mod+Shift+P { power-off-monitors; }
+}
+
+// Spawn at startup
+spawn-at-startup "swww-daemon"
+spawn-at-startup "qs" "-c" "noctalia"   // Noctalia shell
+// spawn-at-startup "mako"

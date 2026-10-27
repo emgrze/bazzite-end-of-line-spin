@@ -1,0 +1,16 @@
+# Noctalia — End of Line (Tron-inspired) default
+# This file is copied to new users via /etc/skel
+# Existing users: cp -r /etc/skel/.config/noctalia ~/.config/
+
+# Placeholder — replace with a real Tron palette once we finalize colors.
+# Current goal: pure black surfaces + cyan accents.
+
+[general]
+# pure_black_dark = true
+# sync_color_scheme = true
+
+[colors]
+# Example Tron palette (to be refined)
+# mPrimary   = "#00F0FF"
+# mSurface   = "#05080F"
+# mOnSurface = "#E0F7FA"

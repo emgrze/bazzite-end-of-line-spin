@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+---
+# Bazzite End of Line Spin
+# Technical image name: bazzite-eol
+name: bazzite-eol
+
+description: Bazzite End of Line Spin — Niri + Noctalia with Tron: Legacy inspired cyan neon aesthetic. Gaming stack preserved.
+
+# Base: Bazzite KDE (desktop, AMD/Intel). Change to bazzite-nvidia / bazzite-nvidia-open if needed.
+base-image: ghcr.io/ublue-os/bazzite
+image-version: stable
+
+modules:
+  # 1. Copy configuration files into the image
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  # 2. Repositories + package install / remove
+  - type: dnf
+    repos:
+      # Brave official repository (for brave-origin)
+      files:
+        - https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+      # Optional: Terra (if noctalia is not yet in official Fedora for the current release)
+      # copr: []  # add if needed later
+    install:
+      packages:
+        # Compositor + shell
+        - niri
+        - noctalia                 # official Fedora package (or noctalia-shell from Terra if needed)
+        # Browser
+        - brave-origin
+        # Light supporting tools
+        - alacritty
+        - swww                     # wallpaper daemon
+        - mako                     # notifications (backup / simple)
+        - wlsunset
+        - thunar
+        - xarchiver
+        - jetbrains-mono-fonts
+        - qt6ct                    # Qt theming without full Plasma
+        # Portals (keep both for flexibility)
+        - xdg-desktop-portal-gnome
+        - xdg-desktop-portal-gtk
+    remove:
+      packages:
+        # Browser we replace
+        - firefox
+        - firefox-langpacks
+        # Heavy / unnecessary KDE apps (safe removals)
+        - dolphin
+        - konsole                  # we use alacritty
+        - kate
+        - kwrite
+        - gwenview
+        - okular
+        - ark
+        - kcalc
+        - kcharselect
+        - kfind
+        - kmag
+        - kmousetool
+        - korganizer
+        - kaddressbook
+        - akregator
+        - kmail
+        - dragon
+        - elisa
+        - juk
+        - k3b
+        - kamoso
+        - kolourpaint
+        - kruler
+        - kcolorchooser
+        - spectacle                # can re-add later if wanted
+        - plasma-welcome
+        - kde-gtk-config           # optional, keep if theming issues appear
+
+  # 3. Signing (BlueBuild default)
+  - type: signing

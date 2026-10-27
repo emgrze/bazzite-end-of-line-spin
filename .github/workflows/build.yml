@@ -1,0 +1,44 @@
+name: Build and Push Bazzite End of Line
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # daily rebuild ~3:00 UTC (after upstream Bazzite)
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "**/*.md"
+  workflow_dispatch:       # manual trigger
+
+env:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+  bluebuild:
+    name: Build Custom Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          overprovision-lvm: true
+          remove-dotnet: true
+          remove-android: true
+          remove-haskell: true
+          remove-codeql: true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Image
+        uses: blue-build/github-action@v1
+        with:
+          recipe: recipes/recipe.yml
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          maximize_build_space: true
