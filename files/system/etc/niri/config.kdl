@@ -1,4 +1,4 @@
-// Bazzite End of Line — Niri default config
+// End of Line — Niri default config
 // Cyan neon aesthetic. Minimal starting point.
 // Users can override in ~/.config/niri/config.kdl
 
@@ -6,7 +6,7 @@
 input {
     keyboard {
         xkb {
-            // layout "pl"
+            layout "pl"
         }
     }
     touchpad {
@@ -40,23 +40,11 @@ layout {
         active-color "#00F0FF"
         inactive-color "#0a1a24"
         // sharp corners for the cyber look
-        // (Niri draws the border; radius is controlled by the window itself)
     }
 }
 
-// Animations — basic + placeholder for custom shaders
+// Animations
 animations {
-    // Uncomment and tune later for Tron-style open/close
-    // slowdown 1.2
-    // window-open {
-    //     duration-ms 350
-    //     custom-shader r" ... "
-    // }
-    // window-close {
-    //     duration-ms 250
-    //     custom-shader r" ... "
-    // }
-
     horizontal-view-movement {
         spring damping-ratio=0.8 stiffness=800 epsilon=0.0001
     }
@@ -64,18 +52,27 @@ animations {
 
 // Window rules
 window-rule {
-    match app-id="firefox"
+    match app-id="brave-origin"
     open-maximized true
 }
 
-// Key bindings (Niri defaults + a few useful ones)
+window-rule {
+    match app-id="brave-browser"
+    open-maximized true
+}
+
+// Key bindings
 binds {
     // Terminal
     Mod+Return { spawn "alacritty"; }
     Mod+Shift+Return { spawn "alacritty"; }
 
-    // Launcher / overview (Noctalia handles most of this)
-    Mod+D { spawn "qs" "-c" "noctalia"; }   // adjust if Noctalia command differs
+    // Launcher / overview (Noctalia)
+    // Dostosuj komendę do tego, jak Noctalia jest uruchamiane w twojej wersji
+    Mod+D { spawn "noctalia-shell"; }
+    // Alternatywy, które mogą być potrzebne w zależności od pakietu:
+    // Mod+D { spawn "qs" "-c" "noctalia"; }
+    // Mod+D { spawn "noctalia"; }
 
     // Window management
     Mod+Q { close-window; }
@@ -104,14 +101,26 @@ binds {
     Mod+3 { focus-workspace 3; }
     Mod+4 { focus-workspace 4; }
     Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
 
     // Screenshot / power
     Mod+Shift+S { screenshot; }
     Mod+Shift+E { quit; }
     Mod+Shift+P { power-off-monitors; }
+
+    // Volume / brightness (media keys)
+    XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute        { spawn "wpctl" "set-mute"   "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86MonBrightnessUp  { spawn "brightnessctl" "set" "5%+"; }
+    XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
 }
 
 // Spawn at startup
 spawn-at-startup "swww-daemon"
-spawn-at-startup "qs" "-c" "noctalia"   // Noctalia shell
+spawn-at-startup "noctalia-shell"
 // spawn-at-startup "mako"
+// spawn-at-startup "wlsunset" "-l" "52.2" "-L" "21.0"   # Warszawa

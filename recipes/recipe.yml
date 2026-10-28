@@ -6,49 +6,40 @@ name: bazzite-eol
 
 description: "Bazzite End of Line Spin — Niri + Noctalia with Tron: Legacy inspired cyan neon aesthetic. Gaming stack preserved."
 
-# Base: Bazzite KDE (desktop, AMD/Intel). Change to bazzite-nvidia / bazzite-nvidia-open if needed.
-base-image: ghcr.io/ublue-os/bazzite-nvidia-open
+# Base: Bazzite KDE (desktop, AMD/Intel). For NVIDIA use: ghcr.io/ublue-os/bazzite-nvidia-open
+base-image: ghcr.io/ublue-os/bazzite
 image-version: stable
 
 modules:
-  # 1. Copy configuration files into the image
+  # 1. Inject system configs (niri, portals, environment, skel)
   - type: files
     files:
       - source: system
         destination: /
 
-  # 2. Repositories + package install / remove
+  # 1b. Enable Terra repos shipped (disabled) by Bazzite
+  - type: script
+    snippets:
+      - |
+        set -euo pipefail
+        for f in /etc/yum.repos.d/terra*.repo; do
+          [ -f "$f" ] || continue
+          sed -i 's/^enabled=0/enabled=1/' "$f" || true
+        done
+        echo "Terra repos enabled (if present):"
+        grep -H '^enabled=' /etc/yum.repos.d/terra*.repo 2>/dev/null || true
+
+  # 2. Packages — REMOVE first, then INSTALL (dependency-safe order)
   - type: dnf
     repos:
       files:
-        # Brave official repository (for brave-origin)
         - https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-        # Terra (swww and other useful packages)
-        - https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo
-    install:
-      packages:
-        # Compositor + shell
-        - niri
-        - noctalia
-        # Browser
-        - brave-origin
-        # Light supporting tools
-        - alacritty
-        - swww                     # from Terra
-        - mako
-        - wlsunset
-        - thunar
-        - xarchiver
-        - jetbrains-mono-fonts
-        - qt6ct
-        # Portals
-        - xdg-desktop-portal-gnome
-        - xdg-desktop-portal-gtk
     remove:
       packages:
+        # Default browser (replaced by Brave Origin)
         - firefox
         - firefox-langpacks
-        # Heavy / unnecessary KDE apps
+        # Heavy KDE apps — do NOT remove plasma-desktop / sddm stack
         - dolphin
         - konsole
         - kate
@@ -75,7 +66,29 @@ modules:
         - kcolorchooser
         - spectacle
         - plasma-welcome
-        - kde-gtk-config
+    install:
+      skip-unavailable: true
+      packages:
+        # Compositor + shell (Noctalia v5 binary = "noctalia")
+        - niri
+        - noctalia
+        # Browser
+        - brave-origin
+        # Core desktop tools
+        - alacritty
+        - thunar
+        - xarchiver
+        - mako
+        - wlsunset
+        - qt6ct
+        - playerctl
+        - xwayland-satellite
+        - jetbrains-mono-fonts
+        # Wallpaper (Terra; skipped if unavailable)
+        - swww
+        # Portals
+        - xdg-desktop-portal-gnome
+        - xdg-desktop-portal-gtk
 
-  # 3. Signing (BlueBuild default)
+  # 3. Image signing
   - type: signing
